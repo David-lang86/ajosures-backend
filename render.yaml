@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: ajosures-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: JDBC_DATABASE_URL
+        fromDatabase:
+          name: ajosures-db
+          property: connectionString
+        # Render returns postgres:// — we need jdbc:postgresql://
+        # Use the transform below or set JDBC_DATABASE_URL manually in the dashboard
+      - key: DB_USERNAME
+        fromDatabase:
+          name: ajosures-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: ajosures-db
+          property: password
+
+databases:
+  - name: ajosures-db
+    databaseName: ajosures
+    user: ajosures_user
+    plan: free
